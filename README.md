@@ -94,7 +94,7 @@ java -jar target/gestiondecitasmedicas.jar
 ## 👥 Colaboradores
 
 - Equipo de desarrollo: *Metodología_Scrum_Equipo 1*
-- Profesor : Wilman Quiñones
+
 
 ## 🛡️ Buenas prácticas
 
