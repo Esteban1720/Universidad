@@ -89,6 +89,8 @@ java -jar target/gestiondecitasmedicas.jar
 
 📌 **Tablero Miro:** https://miro.com/welcomeonboard/WW80VURiczJXTi9pazh1WHRDaWJZUElEOHIxdDdUMXJJZ1A2cVhNaXFDR1V4Ti9qUXh1bVoyelIxK2RYUmpiOEpyRXFwYUFLZ3pyMkRjRmFtelhFbmRTdW50VVNFVUhMTTlMR2NrMFZ1RHNvZmlBd1VZVGRKVkptKzBJaHRWTVBNakdSWkpBejJWRjJhRnhhb1UwcS9BPT0hdjE=?share_link_id=928082782380
 
+📌 **Diapositiva Canva:** https://www.canva.com/design/DAG2ir2mygI/fYyu-WiQumVbXQyxpK7dEA/edit?utm_content=DAG2ir2mygI&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+
 ---
 
 ## 👥 Colaboradores
