@@ -1,0 +1,189 @@
+<!-- src/main/resources/templates/clinica/ver-citas.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Ver Citas — Clínica</title>
+
+  <!-- Bootstrap CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <!-- Bootstrap Icons -->
+  <link 
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" 
+    rel="stylesheet" 
+  />
+
+  <style>
+    :root {
+      --primary: #0b3d91;
+      --secondary: #ffffff;
+      --accent: #f39c12;
+      --bg: #f2f4f7;
+      --card-bg: #ffffff;
+      --text: #333333;
+      --text-muted: #6c757d;
+      --border: #dee2e6;
+      --shadow-sm: rgba(0,0,0,0.05);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0; height: 100%;
+      font-family: "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    a { text-decoration: none; }
+
+    /* Navbar */
+    .navbar {
+      background: var(--primary) !important;
+      box-shadow: 0 2px 4px var(--shadow-sm);
+    }
+    .navbar-brand {
+      color: var(--secondary) !important;
+      font-weight: 600;
+    }
+    .btn-logout {
+      color: var(--secondary);
+      border: 1px solid var(--secondary);
+      border-radius: .375rem;
+      padding: .4rem .8rem;
+      transition: background .2s, color .2s;
+    }
+    .btn-logout:hover {
+      background: var(--secondary);
+      color: var(--primary);
+    }
+
+    /* Content */
+    .container {
+      padding: 2rem 1rem;
+    }
+    h2 {
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+    }
+
+    /* Table */
+    .table-responsive {
+      background: var(--card-bg);
+      border-radius: .75rem;
+      box-shadow: 0 .5rem 1rem var(--shadow-sm);
+      overflow: hidden;
+    }
+    table {
+      margin: 0;
+    }
+    th, td {
+      vertical-align: middle;
+      padding: .75rem 1rem;
+      border-color: var(--border);
+    }
+    .table-hover tbody tr:hover {
+      background: #eef2f7;
+    }
+
+    /* Buttons */
+    .btn-danger { background: #dc3545; border: none; }
+    .btn-success { background: #28a745; border: none; }
+    .btn-secondary { background: #6c757d; border: none; }
+    .btn-primary { background: #007bff; border: none; }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" th:href="@{/clinica/dashboard}">
+        <i class="bi bi-speedometer2"></i> Panel Clínica
+      </a>
+      <div class="ms-auto">
+        <a class="btn btn-logout btn-sm" th:href="@{/logout}">
+          <i class="bi bi-box-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h2>Todas las Citas</h2>
+    <div th:if="${errorMsg}" class="alert alert-danger" th:text="${errorMsg}"></div>
+    <div th:if="${successMsg}" class="alert alert-success" th:text="${successMsg}"></div>
+
+    <div class="table-responsive mb-3">
+      <table class="table table-hover mb-0">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Paciente</th>
+            <th>Médico</th>
+            <th>Clínica</th>
+            <th>Fecha y Hora</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="cita,stat : ${citas}">
+            <td th:text="${stat.index + 1}"></td>
+            <td th:text="${cita.pacienteNombre}"></td>
+            <td th:text="${cita.medicoNombre}"></td>
+            <td th:text="${cita.clinicaNombre}"></td>
+            <td th:text="${#temporals.format(cita.fechaHora,'dd/MM/yyyy HH:mm')}"></td>
+            <td>
+              <span th:text="${cita.estado}"
+                    th:classappend="${cita.estado.name()=='FACTURADA'} ? 'badge bg-secondary' : 'badge bg-info'">
+              </span>
+            </td>
+            <td>
+              <!-- Botón facturar solo si está RESERVADA -->
+              <a th:if="${cita.estado.name()=='RESERVADA'}"
+                 th:href="@{/clinica/citas/facturar/{id}(id=${cita.id})}"
+                 class="btn btn-sm btn-success me-1">
+                <i class="bi bi-currency-dollar"></i>
+              </a>
+
+              <!-- Ver factura si está FACTURADA o REALIZADA -->
+              <a th:if="${cita.estado.name()=='FACTURADA' or cita.estado.name()=='REALIZADA'}"
+                 th:href="@{/clinica/citas/factura/{id}(id=${cita.id})}"
+                 class="btn btn-sm btn-primary me-1"
+                 title="Ver Factura">
+                <i class="bi bi-file-earmark-pdf"></i>
+              </a>
+
+              <!-- Ver historial médico si está REALIZADA -->
+              <a th:if="${cita.estado.name()=='REALIZADA'}"
+                 th:href="@{/clinica/citas/historial/{id}(id=${cita.id})}"
+                 class="btn btn-sm btn-secondary me-1"
+                 title="Ver Historial Médico">
+                <i class="bi bi-journal-text"></i>
+              </a>
+
+              <!-- Botón eliminar SIEMPRE visible -->
+              <form th:action="@{/clinica/citas/eliminar/{id}(id=${cita.id})}"
+                    method="post" style="display:inline">
+                <button class="btn btn-sm btn-danger"
+                        onclick="return confirm('¿Eliminar esta cita?');">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </form>
+            </td>
+          </tr>
+          <tr th:if="${#lists.isEmpty(citas)}">
+            <td colspan="7" class="text-center py-4">No hay citas para mostrar.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <a th:href="@{/clinica/dashboard}" class="btn btn-secondary">
+      <i class="bi bi-arrow-left"></i> Volver
+    </a>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
