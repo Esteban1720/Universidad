@@ -9,7 +9,19 @@ Aplicación web desarrollada en **Java (Spring Boot)** para la gestión de citas
 **Gestión de Citas Médicas** es una aplicación web que facilita la administración de citas entre pacientes y médicos, incluyendo autenticación por roles, generación de informes y envío de notificaciones por correo.  
 El objetivo es digitalizar los procesos clínicos básicos y ofrecer una plataforma moderna y segura para la gestión hospitalaria.
 
----
+## ** TEXTO PROPUESTO **
+----------
+El Proyecto Gestión de Citas Médicas tiene como objetivo desarrollar una aplicación web integral que optimice la administración de los procesos clínicos relacionados con la atención de pacientes. La solución busca centralizar la información de pacientes, médicos, especialidades y clínicas, permitiendo una gestión eficiente de citas, historiales médicos, horarios y facturación, con el fin de mejorar la organización interna y la experiencia del paciente.
+
+El sistema permitirá registrar y administrar pacientes, médicos y centros de atención, además de programar, modificar y cancelar citas de manera ágil. También contará con módulos para la gestión de agendas médicas, seguimiento de atenciones, generación de reportes clínicos y administrativos, así como la emisión de comprobantes de pago y recordatorios automáticos de citas. Todo esto bajo un entorno seguro, escalable y accesible desde cualquier dispositivo.
+
+Para el desarrollo del proyecto se adoptó la metodología ágil Scrum, cuyo enfoque iterativo e incremental facilita la entrega continua de funcionalidades, el mejoramiento progresivo del producto y la comunicación constante con el Product Owner. Esta metodología asegura que cada sprint genere entregables funcionales alineados con los requerimientos clínicos y administrativos, priorizando siempre la calidad del servicio y la satisfacción de los usuarios. 
+
+Scrum, además, ofrece una estructura flexible que permite adaptarse a cambios en los requerimientos, promover la colaboración entre los integrantes del equipo y mantener una visión clara del avance mediante reuniones periódicas (Daily Scrum, Sprint Review y Retrospective). De esta forma, se garantiza que la aplicación evolucione de manera controlada, enfocándose en las necesidades reales del entorno clínico y asegurando un producto robusto, confiable y orientado a la mejora continua de la atención médica.
+
+----------------
+
+____________
 
 ## ⚙️ Tecnologías utilizadas
 
