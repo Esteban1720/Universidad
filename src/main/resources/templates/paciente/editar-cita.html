@@ -1,0 +1,82 @@
+<!-- src/main/resources/templates/paciente/editar-cita.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Editar Cita — Paciente</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+
+  <style>
+    :root {
+      --primary: #0b3d91;
+      --secondary: #ffffff;
+      --accent: #f39c12;
+      --bg: #f2f4f7;
+      --card-bg: #ffffff;
+      --text: #333333;
+      --text-muted: #6c757d;
+      --shadow-sm: rgba(0,0,0,0.05);
+    }
+    *,*::before,*::after{box-sizing:border-box;}
+    body,html{margin:0;padding:0;height:100%;font-family:"Segoe UI",sans-serif;background:var(--bg);color:var(--text);}
+    a{text-decoration:none;}
+
+    .navbar{background:var(--primary)!important;box-shadow:0 2px 4px var(--shadow-sm);}
+    .navbar-brand{color:var(--secondary)!important;font-weight:600;}
+    .btn-logout{color:var(--secondary);border:1px solid var(--secondary);border-radius:.375rem;padding:.4rem .8rem;transition:background .2s,color .2s;}
+    .btn-logout:hover{background:var(--secondary);color:var(--primary);}
+
+    .container{padding:2rem 1rem;max-width:600px;margin:auto;}
+    .card{background:var(--card-bg);border:none;border-radius:.75rem;box-shadow:0 .5rem 1rem var(--shadow-sm);}
+    .card-body h2{color:var(--primary);margin-bottom:1rem;}
+    .form-label{font-weight:500;color:var(--text-muted);}
+    .form-control:read-only{background:#e9ecef;opacity:1;}
+    .btn-primary{background:var(--accent);border:none;transition:transform .2s;}
+    .btn-primary:hover{background:#d48806;transform:scale(1.03);}
+    .btn-secondary{background:#6c757d;border:none;}
+    .btn-secondary:hover{background:#5a6268;}
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" th:href="@{/paciente/mis-citas}"><i class="bi bi-calendar3"></i> Paciente</a>
+    <div class="ms-auto">
+      <a class="btn btn-logout btn-sm" th:href="@{/logout}"><i class="bi bi-box-arrow-right"></i></a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="card">
+    <div class="card-body">
+      <h2>Editar Fecha de Cita</h2>
+      <div th:if="${errorMsg}" class="alert alert-danger" th:text="${errorMsg}"></div>
+      <form th:action="@{'/paciente/editar-cita/'+${cita.id}}" method="post">
+        <div class="mb-3">
+          <label class="form-label">Clínica</label>
+          <input type="text" class="form-control" th:value="${cita.clinica.nombre}" readonly/>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Médico</label>
+          <input type="text" class="form-control" th:value="${cita.medico.nombre}" readonly/>
+        </div>
+        <div class="mb-3">
+          <label for="fechaHora" class="form-label">Nueva Fecha y Hora</label>
+          <input type="datetime-local" id="fechaHora" name="fechaHora"
+                 class="form-control"
+                 th:value="${#temporals.format(cita.fechaHora,'yyyy-MM-dd''T''HH:mm')}"
+                 required/>
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Guardar Cambios</button>
+        <a th:href="@{/paciente/mis-citas}" class="btn btn-secondary ms-2"><i class="bi bi-x-circle"></i> Cancelar</a>
+      </form>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
