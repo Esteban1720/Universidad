@@ -5,12 +5,6 @@ Aplicación web desarrollada en **Java (Spring Boot)** para la gestión de citas
 ---
 
 ## 📋 Descripción del proyecto
-
-**Gestión de Citas Médicas** es una aplicación web que facilita la administración de citas entre pacientes y médicos, incluyendo autenticación por roles, generación de informes y envío de notificaciones por correo.  
-El objetivo es digitalizar los procesos clínicos básicos y ofrecer una plataforma moderna y segura para la gestión hospitalaria.
-
-## ** TEXTO PROPUESTO **
-----------
 El Proyecto Gestión de Citas Médicas tiene como objetivo desarrollar una aplicación web integral que optimice la administración de los procesos clínicos relacionados con la atención de pacientes. La solución busca centralizar la información de pacientes, médicos, especialidades y clínicas, permitiendo una gestión eficiente de citas, historiales médicos, horarios y facturación, con el fin de mejorar la organización interna y la experiencia del paciente.
 
 El sistema permitirá registrar y administrar pacientes, médicos y centros de atención, además de programar, modificar y cancelar citas de manera ágil. También contará con módulos para la gestión de agendas médicas, seguimiento de atenciones, generación de reportes clínicos y administrativos, así como la emisión de comprobantes de pago y recordatorios automáticos de citas. Todo esto bajo un entorno seguro, escalable y accesible desde cualquier dispositivo.
