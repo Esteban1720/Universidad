@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Facturar Cita — Clínica</title>
+  <!-- Bootstrap CSS -->
+  <link 
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
+    rel="stylesheet"
+  />
+  <!-- Bootstrap Icons -->
+  <link 
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" 
+    rel="stylesheet"
+  />
+</head>
+<body class="bg-light">
+  <div class="container py-4">
+    <h2 class="mb-4">Facturar Cita #<span th:text="${cita.id}"/></h2>
+
+    <div class="mb-3">
+      <strong>Paciente:</strong> <span th:text="${cita.pacienteNombre}"/>
+    </div>
+    <div class="mb-3">
+      <strong>Médico:</strong>   <span th:text="${cita.medicoNombre}"/>
+    </div>
+    <div class="mb-3">
+      <strong>Clínica:</strong>  <span th:text="${cita.clinicaNombre}"/>
+    </div>
+    <div class="mb-3">
+      <strong>Fecha y Hora:</strong>
+      <span th:text="${#temporals.format(cita.fechaHora,'dd/MM/yyyy HH:mm')}"/>
+    </div>
+    <div class="mb-3">
+      <strong>Motivo:</strong>    <span th:text="${cita.motivo}"/>
+    </div>
+
+    <form th:action="@{/clinica/citas/facturar/{id}(id=${cita.id})}" method="post">
+      <div class="mb-3">
+        <label for="valorPagar" class="form-label">Valor a pagar</label>
+        <input type="number"
+               step="0.01"
+               min="0"
+               id="valorPagar"
+               name="valorPagar"
+               class="form-control"
+               placeholder="0.00"
+               required/>
+      </div>
+      <button type="submit" class="btn btn-success me-2">
+        <i class="bi bi-currency-dollar me-1"></i>Facturar
+      </button>
+      <a th:href="@{/clinica/citas}" class="btn btn-secondary">
+        <i class="bi bi-x-circle me-1"></i>Cancelar
+      </a>
+    </form>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script 
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+  </script>
+</body>
+</html>
