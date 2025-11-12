@@ -1,3 +1,44 @@
+// PacienteController.java
+// -------------------------------------------------------------
+// Este controlador maneja todas las acciones que puede realizar
+// un paciente dentro del sistema de gestión de citas médicas.
+//
+// Solo los usuarios con rol "PACIENTE" pueden acceder a estas funciones.
+//
+// FUNCIONES PRINCIPALES:
+//
+// 1. /nueva-cita → Muestra el formulario para agendar una cita.
+//    Carga las clínicas disponibles y, si se elige una, también muestra
+//    los médicos asociados a esa clínica.
+//
+// 2. POST /nueva-cita → Procesa el guardado de la nueva cita, tomando la fecha,
+//    hora, médico, motivo y correo de contacto del paciente.
+//
+// 3. /mis-citas → Muestra la lista de todas las citas que tiene el paciente,
+//    sin importar su estado (reservada, cancelada, realizada, etc.).
+//
+// 4. /editar-cita/{id} → Muestra un formulario para editar la fecha de una cita,
+//    pero solo si la cita está en estado "RESERVADA".
+//
+// 5. POST /editar-cita/{id} → Procesa el cambio de fecha de una cita.
+//    Valida que la cita pertenezca al paciente y que esté en estado "RESERVADA".
+//
+// 6. /cancelar-cita/{id} → Permite al paciente cancelar una cita, siempre y cuando
+//    aún esté en estado "RESERVADA".
+//
+// 7. /citas/historial/{id} → Permite al paciente ver el historial médico de una cita,
+//    pero solo si ya fue realizada y tiene un historial asociado.
+//
+// 8. /historial/pdf/{id} → Genera un archivo PDF con el historial médico de la cita,
+//    mostrando los datos del paciente, médico, clínica, diagnóstico y receta.
+//
+// En resumen:
+// Este código permite al paciente agendar, modificar, cancelar y visualizar
+// sus citas médicas, así como consultar o descargar en PDF el historial
+// médico de sus consultas atendidas.
+// -------------------------------------------------------------
+
+
 package com.co.gestiondecitasmedicas.controller;
 
 import java.time.LocalDateTime;
