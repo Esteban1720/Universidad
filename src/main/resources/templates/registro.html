@@ -1,0 +1,250 @@
+<!-- src/main/resources/templates/registro.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Registro de Usuario — Citas Médicas</title>
+
+  <!-- Bootstrap CSS -->
+  <link 
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
+    rel="stylesheet"
+  />
+  <!-- Bootstrap Icons -->
+  <link 
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" 
+    rel="stylesheet"
+  />
+
+  <style>
+    /* ==================== Variables Compartidas ==================== */
+    :root {
+      --primary: #0b3d91;
+      --secondary: #ffffff;
+      --accent: #f39c12;
+      --bg: #f2f4f7;
+      --card-bg: #ffffff;
+      --text: #333333;
+      --text-muted: #6c757d;
+      --border: #dee2e6;
+      --shadow-sm: rgba(0,0,0,0.05);
+    }
+
+    /* ==================== Reset y Base ==================== */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0; height: 100%;
+      font-family: "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    a { text-decoration: none; }
+
+    /* ==================== Navbar ==================== */
+    .navbar {
+      background: var(--primary) !important;
+      box-shadow: 0 2px 4px var(--shadow-sm);
+    }
+    .navbar-brand {
+      color: var(--secondary) !important;
+      font-weight: 600;
+    }
+
+    /* ==================== Contenedor Principal ==================== */
+    .container {
+      padding: 2rem 1rem;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    /* ==================== Card de Registro ==================== */
+    .card {
+      background: var(--card-bg);
+      border: none;
+      border-radius: 0.75rem;
+      box-shadow: 0 0.5rem 1rem var(--shadow-sm);
+    }
+    .card-header {
+      background: var(--primary);
+      color: var(--secondary);
+      border-top-left-radius: 0.75rem;
+      border-top-right-radius: 0.75rem;
+      text-align: center;
+    }
+    .form-label {
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+    .form-text {
+      color: var(--text-muted);
+    }
+
+    /* ==================== Botones ==================== */
+    .btn-success {
+      background: var(--accent);
+      border: none;
+      transition: transform 0.2s;
+    }
+    .btn-success:hover {
+      background: #d48806;
+      transform: scale(1.03);
+    }
+    .btn-link {
+      color: var(--primary);
+      font-weight: 500;
+    }
+    .btn-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" th:href="@{/}">
+        <i class="bi bi-house-door-fill me-1"></i>Citas Médicas
+      </a>
+    </div>
+  </nav>
+
+  <!-- Registro Form -->
+  <div class="container">
+    <div class="card shadow-sm">
+      <div class="card-header">
+        <h3 class="mb-0">Registro de Usuario</h3>
+      </div>
+      <div class="card-body">
+        <!-- Error Message -->
+        <div th:if="${errorMsg}" class="alert alert-danger" th:text="${errorMsg}"></div>
+
+        <form th:action="@{/registro}" th:object="${usuarioDto}" method="post">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="nombre" class="form-label">Nombre completo:</label>
+              <input 
+                type="text" 
+                id="nombre" 
+                th:field="*{nombre}" 
+                class="form-control" 
+                placeholder="Ej. Juan Pérez" 
+                required 
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="usuariologin" class="form-label">Usuario (login):</label>
+              <input 
+                type="text" 
+                id="usuariologin" 
+                th:field="*{usuariologin}" 
+                class="form-control" 
+                placeholder="Ej. juanp" 
+                required 
+              />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="documento" class="form-label">Documento:</label>
+              <input 
+                type="text" 
+                id="documento" 
+                th:field="*{documento}" 
+                class="form-control" 
+                placeholder="Cédula, pasaporte, etc." 
+                required 
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="email" class="form-label">Email:</label>
+              <input 
+                type="email" 
+                id="email" 
+                th:field="*{email}" 
+                class="form-control" 
+                placeholder="ejemplo@dominio.com" 
+                required 
+              />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="telefono" class="form-label">Teléfono:</label>
+              <input 
+                type="text" 
+                id="telefono" 
+                th:field="*{telefono}" 
+                class="form-control" 
+                placeholder="Opcional" 
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="direccion" class="form-label">Dirección:</label>
+              <input 
+                type="text" 
+                id="direccion" 
+                th:field="*{direccion}" 
+                class="form-control" 
+                placeholder="Ciudad, barrio, calle" 
+              />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">Contraseña:</label>
+            <input 
+              type="password" 
+              id="password" 
+              th:field="*{password}" 
+              class="form-control" 
+              placeholder="•••••••••"
+              required 
+            />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Rol:</label>
+            <select 
+              th:field="*{rolesIds}" 
+              class="form-select" 
+              multiple 
+              required
+            >
+              <option 
+                th:each="rol : ${rolesDisponibles}" 
+                th:if="${rol.id == 1 or rol.id == 3}" 
+                th:value="${rol.id}" 
+                th:text="${rol.nombre}">
+              </option>
+            </select>
+            <div class="form-text">
+              Mantén presionada <strong>Ctrl</strong> (o <strong>Cmd</strong>) para múltiples roles.
+            </div>
+          </div>
+
+          <div class="d-grid mb-3">
+            <button type="submit" class="btn btn-success">
+              <i class="bi bi-person-plus me-1"></i>Registrar
+            </button>
+          </div>
+
+          <div class="text-center">
+            <small>¿Ya tienes cuenta? 
+              <a th:href="@{/login}" class="btn-link">Inicia sesión aquí</a>
+            </small>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script 
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+  ></script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!-- Created with Jaspersoft Studio version 7.0.3.final using JasperReports Library version 7.0.3-41034ca841d452f3305ba55b9042260aaa1ab5dd  -->
+<jasperReport name="Facturacion" language="java" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb94e631-6b45-455d-9431-1f0542ffae4b">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<query language="sql"><![CDATA[]]></query>
+	<field name="fechaHora" class="java.sql.Timestamp">
+		<description><![CDATA[fechaHora]]></description>
+	</field>
+	<field name="medicoNombre" class="java.lang.String">
+		<description><![CDATA[medicoNombre]]></description>
+	</field>
+	<field name="pacienteNombre" class="java.lang.String">
+		<description><![CDATA[pacienteNombre]]></description>
+	</field>
+	<field name="documento" class="java.lang.String">
+		<description><![CDATA[documento]]></description>
+	</field>
+	<field name="valorPagar" class="java.math.BigDecimal">
+		<description><![CDATA[valorPagar]]></description>
+	</field>
+	<field name="motivo" class="java.lang.String">
+		<description><![CDATA[motivo]]></description>
+	</field>
+	<field name="clinicaNombre" class="java.lang.String">
+		<description><![CDATA[clinicaNombre]]></description>
+	</field>
+	<background splitType="Stretch"/>
+	<title height="61" splitType="Stretch">
+		<element kind="rectangle" uuid="59c80e06-25b8-415d-891c-f5c6f9aabeed" mode="Opaque" x="0" y="1" width="550" height="60" backcolor="#0B3D91"/>
+		<element kind="staticText" uuid="aede8138-a7b3-40b0-813c-7e69b785f770" x="0" y="0" width="240" height="30" backcolor="#0B3D91" fontSize="22.0" bold="true" hTextAlign="Right">
+			<text><![CDATA[Centro de Salud ]]></text>
+		</element>
+		<element kind="staticText" uuid="fa7aaeaa-f49e-4594-89ab-469f86a8f07d" x="0" y="30" width="550" height="30" backcolor="#0B3D91" fontSize="22.0" bold="true" hTextAlign="Center">
+			<text><![CDATA[Factura de Cita]]></text>
+		</element>
+		<element kind="textField" uuid="c0a6ebd7-6c03-4e58-b752-91cf46aa7fd8" x="250" y="0" width="300" height="30" backcolor="#0B3D91" fontSize="22.0" bold="true" hTextAlign="Left">
+			<expression><![CDATA[$F{clinicaNombre}]]></expression>
+		</element>
+		<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+	</title>
+	<pageHeader height="120" splitType="Stretch">
+		<element kind="staticText" uuid="e330b017-1f85-41e7-bef6-c1777ee01cde" x="0" y="0" width="100" height="30" fontSize="15.0" hTextAlign="Left">
+			<text><![CDATA[Fecha y hora:]]></text>
+		</element>
+		<element kind="textField" uuid="91d42d44-5089-428f-9c89-909235e89f2c" x="100" y="0" width="450" height="30" fontSize="15.0">
+			<expression><![CDATA[
+        $F{fechaHora} == null
+          ? ""
+          : new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm")
+              .format($F{fechaHora})
+      ]]></expression>
+			<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+			<property name="net.sf.jasperreports.textField.expression.class" value="java.lang.String"/>
+		</element>
+		<element kind="staticText" uuid="d362a74b-fa56-4cdb-970a-a3aecb6bd5ef" x="0" y="30" width="60" height="30" fontSize="15.0" hTextAlign="Left">
+			<text><![CDATA[Medico:]]></text>
+		</element>
+		<element kind="textField" uuid="e8661710-b0ea-4fb0-b244-fcf1ec543efc" x="60" y="30" width="490" height="30" fontSize="15.0" hTextAlign="Left">
+			<expression><![CDATA[$F{medicoNombre}]]></expression>
+		</element>
+		<element kind="staticText" uuid="07681120-6919-4e1d-9d93-d9d6712e4797" x="0" y="60" width="70" height="30" fontSize="15.0" hTextAlign="Left">
+			<text><![CDATA[Paciente:]]></text>
+		</element>
+		<element kind="textField" uuid="05183b68-2efb-4432-b67a-284740bade3d" x="70" y="60" width="480" height="30" fontSize="15.0" hTextAlign="Left">
+			<expression><![CDATA[$F{pacienteNombre}]]></expression>
+		</element>
+		<element kind="staticText" uuid="9077df77-f951-4185-be43-9b5f4fa424e4" x="0" y="90" width="90" height="30" fontSize="15.0" hTextAlign="Left">
+			<text><![CDATA[Documento:]]></text>
+		</element>
+		<element kind="textField" uuid="f19cff88-dd4e-443f-9ca8-3a743121af3c" x="80" y="90" width="470" height="30" fontSize="15.0" hTextAlign="Left">
+			<expression><![CDATA[$F{documento}]]></expression>
+		</element>
+	</pageHeader>
+	<columnHeader height="50" splitType="Stretch">
+		<element kind="rectangle" uuid="ec8c2e1e-b4c7-46aa-9551-498d4a936319" mode="Opaque" x="0" y="0" width="546" height="50" backcolor="#0B3D91"/>
+		<element kind="staticText" uuid="7ad87eef-75e1-40a3-bcb3-9952716c49cc" x="0" y="0" width="390" height="50" backcolor="#84B7DB" fontSize="22.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[Descripcion]]></text>
+		</element>
+		<element kind="staticText" uuid="b6f2c3d7-00ce-4474-b5ec-504cb5f03208" x="390" y="0" width="160" height="50" backcolor="#83B7EB" fontSize="22.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[Valor a Pagar]]></text>
+		</element>
+	</columnHeader>
+	<detail>
+		<band height="150" splitType="Stretch">
+			<element kind="textField" uuid="196d5b92-2850-4e33-92fd-aafabb9295ac" x="0" y="0" width="390" height="150" fontSize="15.0" hTextAlign="Left">
+				<expression><![CDATA[$F{motivo}]]></expression>
+			</element>
+			<element kind="textField" uuid="73e98592-bfaf-4d35-99a6-a8a244f30722" x="390" y="0" width="160" height="150" fontSize="15.0" hTextAlign="Center">
+				<expression><![CDATA[$F{valorPagar}]]></expression>
+			</element>
+		</band>
+	</detail>
+	<summary height="70" splitType="Stretch">
+		<element kind="staticText" uuid="5abf716f-9de3-4746-a295-c1195e154207" x="0" y="0" width="170" height="30" fontSize="22.0" bold="true" hTextAlign="Left">
+			<text><![CDATA[Observaciones:]]></text>
+		</element>
+		<element kind="staticText" uuid="99d1c147-6d21-40bf-9c3c-79bdb31ae7c4" x="0" y="30" width="550" height="40" fontSize="15.0" bold="true" hTextAlign="Left">
+			<text><![CDATA[Paciente: debes presentarte ala cita 20 minutos antes de la hora acordada, gracias por confiar en nosotros.]]></text>
+		</element>
+	</summary>
+</jasperReport>

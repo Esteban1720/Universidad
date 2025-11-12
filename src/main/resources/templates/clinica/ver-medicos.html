@@ -1,0 +1,123 @@
+<!-- src/main/resources/templates/clinica/ver-medicos.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Ver Médicos — Clínica</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- Bootstrap Icons -->
+  <link 
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" 
+    rel="stylesheet" 
+  />
+
+  <style>
+    :root {
+      --primary: #0b3d91;
+      --secondary: #ffffff;
+      --bg: #f2f4f7;
+      --card-bg: #ffffff;
+      --text: #333333;
+      --shadow-sm: rgba(0,0,0,0.05);
+    }
+    *,*::before,*::after{box-sizing:border-box;}
+    html, body {
+      margin:0; padding:0; height:100%;
+      font-family:"Segoe UI",sans-serif;
+      background:var(--bg); color:var(--text);
+    }
+    a{text-decoration:none;}
+
+    /* Navbar */
+    .navbar {
+      background: var(--primary) !important;
+      box-shadow: 0 2px 4px var(--shadow-sm);
+    }
+    .navbar-brand {
+      color: var(--secondary) !important;
+      font-weight:600;
+    }
+    .btn-logout {
+      color: var(--secondary);
+      border:1px solid var(--secondary);
+      border-radius:.375rem;
+      padding:.4rem .8rem;
+      transition:background .2s,color .2s;
+    }
+    .btn-logout:hover {
+      background: var(--secondary);
+      color: var(--primary);
+    }
+
+    /* Content */
+    .container {
+      padding: 2rem 1rem;
+    }
+    h2 {
+      color: var(--primary);
+      margin-bottom:1.5rem;
+    }
+
+    /* Table */
+    table {
+      background: var(--card-bg);
+      border-radius:.75rem;
+      box-shadow:0 .5rem 1rem var(--shadow-sm);
+      overflow:hidden;
+    }
+    th, td {
+      padding:.75rem 1rem;
+    }
+    .table-striped tbody tr:nth-of-type(odd){
+      background:#eef2f7;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" th:href="@{/clinica/dashboard}">
+        <i class="bi bi-person-badge"></i> Panel Clínica
+      </a>
+      <div class="ms-auto">
+        <a class="btn btn-logout btn-sm" th:href="@{/logout}">
+          <i class="bi bi-box-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h2>Médicos de la Clínica</h2>
+    <table class="table table-striped mb-0">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Teléfono</th>
+          <th>Documento</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="med : ${medicos}">
+          <td th:text="${med.nombre}"></td>
+          <td th:text="${med.email}"></td>
+          <td th:text="${med.telefono}"></td>
+          <td th:text="${med.documento}"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(medicos)}">
+          <td colspan="4" class="text-center py-4">No hay médicos registrados.</td>
+        </tr>
+      </tbody>
+    </table>
+    <a th:href="@{/clinica/dashboard}" class="btn btn-secondary mt-3">
+      <i class="bi bi-arrow-left"></i> Volver
+    </a>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

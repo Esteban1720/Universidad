@@ -1,0 +1,143 @@
+<!-- src/main/resources/templates/paciente/mis-citas.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Mis Citas — Paciente</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+
+  <style>
+    :root {
+      --primary: #0b3d91;
+      --secondary: #ffffff;
+      --accent: #f39c12;
+      --bg: #f2f4f7;
+      --card-bg: #ffffff;
+      --text: #333333;
+      --text-muted: #6c757d;
+      --shadow-sm: rgba(0,0,0,0.05);
+    }
+    *,*::before,*::after { box-sizing:border-box; }
+    html,body { margin:0; padding:0; height:100%; font-family:"Segoe UI",sans-serif; background:var(--bg); color:var(--text); }
+    a { text-decoration:none; }
+
+    .navbar { background:var(--primary)!important; box-shadow:0 2px 4px var(--shadow-sm); }
+    .navbar-brand { color:var(--secondary)!important; font-weight:600; }
+    .btn-logout {
+      color:var(--secondary);
+      border:1px solid var(--secondary);
+      border-radius:.375rem;
+      padding:.4rem .8rem;
+      transition:background .2s;
+    }
+    .btn-logout:hover { background:var(--secondary); color:var(--primary); }
+
+    .container { padding:2rem 1rem; }
+    h2 { color:var(--primary); margin-bottom:1.5rem; }
+
+    .table-responsive {
+      background:var(--card-bg);
+      border-radius:.75rem;
+      box-shadow:0 .5rem 1rem var(--shadow-sm);
+      overflow:hidden;
+    }
+    table { margin:0; }
+    th,td { padding:.75rem 1rem; vertical-align:middle; }
+    .table-hover tbody tr:hover { background:#eef2f7; }
+    .btn-warning { background:#ffc107; border:none; }
+    .btn-danger  { background:#dc3545; border:none; }
+    .btn-secondary { background:#6c757d; border:none; }
+    .btn-primary { background:var(--accent); border:none; transition:transform .2s; }
+    .btn-primary:hover { background:#d48806; transform:scale(1.05); }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" th:href="@{/paciente/dashboard}">
+        <i class="bi bi-person-heart"></i> Paciente
+      </a>
+      <div class="ms-auto">
+        <a class="btn btn-logout btn-sm" th:href="@{/logout}">
+          <i class="bi bi-box-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h2>Mis Citas</h2>
+    <div th:if="${errorMsg}" class="alert alert-danger" th:text="${errorMsg}"></div>
+    <div th:if="${successMsg}" class="alert alert-success" th:text="${successMsg}"></div>
+
+    <div class="table-responsive mb-3">
+      <table class="table table-hover mb-0">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Clínica</th>
+            <th>Médico</th>
+            <th>Fecha y Hora</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="cita,stat : ${citas}">
+            <td th:text="${stat.index+1}"></td>
+            <td th:text="${cita.clinica.nombre}"></td>
+            <td th:text="${cita.medico.nombre}"></td>
+            <td th:text="${#temporals.format(cita.fechaHora,'dd/MM/yyyy HH:mm')}"></td>
+            <td th:text="${cita.estado}"></td>
+            <td>
+              <!-- Editar y cancelar si está RESERVADA -->
+              <a th:if="${cita.estado.name()=='RESERVADA'}"
+                 th:href="@{'/paciente/editar-cita/'+${cita.id}}"
+                 class="btn btn-sm btn-warning me-1">
+                <i class="bi bi-pencil-fill"></i>
+              </a>
+              <form th:if="${cita.estado.name()=='RESERVADA'}"
+                    th:action="@{'/paciente/cancelar-cita/'+${cita.id}}"
+                    method="post" style="display:inline">
+                <button class="btn btn-sm btn-danger">
+                  <i class="bi bi-x-circle-fill"></i>
+                </button>
+              </form>
+
+              <!-- Ver Historial Médico si está REALIZADA -->
+              <a th:if="${cita.estado.name()=='REALIZADA'}"
+                 th:href="@{'/paciente/citas/historial/'+${cita.id}}"
+                 class="btn btn-sm btn-primary ms-1"
+                 title="Ver Historial Médico">
+                <i class="bi bi-journal-text"></i>
+              </a>
+            </td>
+          </tr>
+          <tr th:if="${#lists.isEmpty(citas)}">
+            <td colspan="6" class="text-center py-4">No tienes citas programadas.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="mt-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
+		<!-- Botón Volver al Dashboard -->
+		 <a th:href="@{/paciente/dashboard}" class="btn btn-outline-secondary">
+		   <i class="bi bi-speedometer2 me-1"></i>Inicio
+		 </a>
+
+      <!-- Botones de acción agrupados -->
+      <div class="d-flex gap-2">
+        <a th:href="@{/paciente/nueva-cita}" class="btn btn-primary">
+          <i class="bi bi-plus-circle me-1"></i>Agendar Cita
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

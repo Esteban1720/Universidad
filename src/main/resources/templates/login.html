@@ -1,0 +1,174 @@
+<!-- src/main/resources/templates/login.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Iniciar Sesión — Citas Médicas</title>
+
+  <!-- Bootstrap CSS -->
+  <link 
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
+    rel="stylesheet"
+  />
+  <!-- Bootstrap Icons -->
+  <link 
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" 
+    rel="stylesheet"
+  />
+
+  <style>
+    /* ==================== Variables Compartidas ==================== */
+    :root {
+      --primary: #0b3d91;
+      --secondary: #ffffff;
+      --accent: #f39c12;
+      --bg: #f2f4f7;
+      --card-bg: #ffffff;
+      --text: #333333;
+      --text-muted: #6c757d;
+      --shadow-sm: rgba(0,0,0,0.05);
+    }
+
+    /* ==================== Reset y Base ==================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    a {
+      text-decoration: none;
+    }
+
+    /* ==================== Navbar ==================== */
+    .navbar {
+      background: var(--primary) !important;
+      box-shadow: 0 2px 4px var(--shadow-sm);
+    }
+    .navbar-brand {
+      color: var(--secondary) !important;
+      font-weight: 600;
+    }
+
+    /* ==================== Contenedor Principal ==================== */
+    .container {
+      padding: 2rem 1rem;
+    }
+
+    /* ==================== Card de Login ==================== */
+    .card {
+      background: var(--card-bg);
+      border: none;
+      border-radius: 0.75rem;
+      box-shadow: 0 0.5rem 1rem var(--shadow-sm);
+    }
+    .card-header {
+      background: var(--primary);
+      color: var(--secondary);
+      border-top-left-radius: 0.75rem;
+      border-top-right-radius: 0.75rem;
+      text-align: center;
+    }
+    .card-body .form-label {
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+    .btn-primary {
+      background: var(--accent);
+      border: none;
+      transition: transform 0.2s;
+    }
+    .btn-primary:hover {
+      background: #d48806;
+      transform: scale(1.03);
+    }
+
+    /* ==================== Pie de Card ==================== */
+    .card-body small a {
+      color: var(--primary);
+      font-weight: 500;
+    }
+    .card-body small a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" th:href="@{/}">
+        <i class="bi bi-house-door-fill me-1"></i>Citas Médicas
+      </a>
+    </div>
+  </nav>
+
+  <!-- Login Form -->
+  <div class="container" style="max-width: 400px;">
+    <div class="card shadow-sm">
+      <div class="card-header">
+        <h3 class="mb-0">Iniciar Sesión</h3>
+      </div>
+      <div class="card-body">
+        <!-- Success / Error Messages -->
+        <div th:if="${successMsg}" class="alert alert-success" th:text="${successMsg}"></div>
+        <div th:if="${errorMsg}" class="alert alert-danger" th:text="${errorMsg}"></div>
+
+        <form th:action="@{/login}" method="post">
+          <div class="mb-3">
+            <label for="usuariologin" class="form-label">Usuario:</label>
+            <input
+              type="text"
+              id="usuariologin"
+              name="usuariologin"
+              class="form-control"
+              placeholder="Ingresa tu usuario"
+              required
+            />
+          </div>
+          <div class="mb-4">
+            <label for="password" class="form-label">Contraseña:</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="form-control"
+              placeholder="•••••••••"
+              required
+            />
+          </div>
+          <div class="d-grid mb-3">
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-box-arrow-in-right me-1"></i>Ingresar
+            </button>
+          </div>
+          <div class="text-center">
+            <small>¿No tienes cuenta?
+              <a th:href="@{/registro}">Regístrate aquí</a>
+            </small>
+          </div>
+		  <!-- NUEVO: botón de retorno -->
+		  <div class="text-center mt-4">
+		    <a th:href="@{ / }" class="btn btn-outline-secondary">
+		      <i class="bi bi-arrow-left me-1"></i>Volver al inicio
+		    </a>
+		  </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+
+  <!-- Bootstrap JS -->
+  <script 
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+  ></script>
+</body>
+</html>
