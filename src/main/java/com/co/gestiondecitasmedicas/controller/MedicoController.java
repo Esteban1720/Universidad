@@ -1,4 +1,31 @@
 // src/main/java/com/co/gestiondecitasmedicas/controller/MedicoController.java
+
+// MedicoController.java
+// -------------------------------------------------------------
+// Este controlador maneja todas las acciones que puede realizar
+// un médico dentro del sistema de gestión de citas médicas.
+//
+// Solo los usuarios con rol "MEDICO" pueden acceder a estas funciones.
+//
+// FUNCIONES PRINCIPALES:
+//
+// 1. /dashboard → Muestra el panel principal del médico con su nombre.
+// 2. /citas → Lista todas las citas asignadas al médico.
+// 3. /editar-cita/{id} → Permite cambiar la fecha y hora de una cita
+//    (solo si está en estado RESERVADA).
+// 4. /cancelar-cita/{id} → Cancela una cita (solo si está RESERVADA).
+// 5. /realizar-cita/{id} → Permite atender una cita facturada,
+//    registrando diagnóstico y receta, y marcándola como REALIZADA.
+// 6. /citas/historial/{id} → Muestra el historial médico de una cita
+//    (solo si ya fue realizada).
+// 7. /historial-cita/pdf/{id} → Genera y muestra en PDF el historial médico de la cita.
+//
+// En resumen:
+// Este código se encarga de que el médico pueda ver, modificar, cancelar,
+// atender y consultar sus citas, así como descargar en PDF el historial
+// médico de cada paciente atendido.
+// -------------------------------------------------------------
+
 package com.co.gestiondecitasmedicas.controller;
 
 import java.time.LocalDateTime;
