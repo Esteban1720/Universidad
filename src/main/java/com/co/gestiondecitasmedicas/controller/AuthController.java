@@ -1,4 +1,52 @@
 // src/main/java/com/example/gestioncitas/controller/AuthController.java
+/**
+ * Esta clase se encarga de manejar todo lo relacionado con el inicio de sesión, 
+ * registro y cierre de sesión de los usuarios dentro del sistema de gestión de citas médicas.
+ * 
+ * En pocas palabras, controla cómo los usuarios entran, se registran y salen del sistema.
+ * 
+ * Funciones principales:
+ * 
+ * 1. Página de inicio ("/" o "/index"):
+ *    - Muestra la página principal donde el usuario puede elegir entre iniciar sesión o crear una cuenta nueva.
+ * 
+ * 2. Inicio de sesión ("/login"):
+ *    - Muestra el formulario donde el usuario escribe su nombre de usuario y contraseña.
+ *    - Si los datos son incorrectos, muestra un mensaje de error en pantalla.
+ * 
+ * 3. Registro de usuario ("/registro"):
+ *    - Muestra un formulario para crear una nueva cuenta.
+ *    - Carga la lista de roles disponibles (por ejemplo, “Paciente”, “Médico”, “Administrador”)
+ *      desde la base de datos para que el usuario seleccione su rol.
+ *    - Cuando el usuario envía el formulario, guarda la información en la base de datos.
+ *    - Si todo sale bien, muestra un mensaje de éxito e invita al usuario a iniciar sesión.
+ *    - Si ocurre algún error (por ejemplo, un usuario ya registrado), muestra un mensaje explicando el problema.
+ * 
+ * 4. Cierre de sesión ("/logout"):
+ *    - Elimina la sesión actual del usuario (es decir, lo desconecta del sistema) 
+ *      y lo redirige a la página de inicio de sesión.
+ * 
+ * En resumen, este controlador sirve como puente entre las páginas del sitio web 
+ * (hechas con Thymeleaf) y la lógica interna del sistema (manejada por los servicios de usuario y rol),
+ * garantizando que las acciones básicas de autenticación funcionen correctamente.
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 package com.co.gestiondecitasmedicas.controller;
 
 import java.util.List;
