@@ -1,4 +1,50 @@
 // src/main/java/com/co/gestiondecitasmedicas/controller/ClinicaController.java
+
+/**
+ * Esta clase controla todas las acciones que puede realizar una clínica
+ * dentro del sistema de gestión de citas médicas. 
+ * 
+ * En palabras sencillas, aquí se define todo lo que una clínica puede hacer desde su cuenta,
+ * como gestionar médicos, citas, facturas y consultar historiales médicos.
+ * 
+ * Funciones principales:
+ * 
+ * 1. **Panel principal de la clínica ("/clinica/dashboard")**
+ *    - Muestra la página principal de la clínica con su nombre y acceso a las demás funciones.
+ * 
+ * 2. **Gestión de médicos**
+ *    - Permite registrar nuevos médicos que trabajen para la clínica.
+ *    - Permite listar todos los médicos asociados a la clínica.
+ * 
+ * 3. **Gestión de citas**
+ *    - Muestra todas las citas agendadas en la clínica.
+ *    - Permite eliminar citas si es necesario.
+ *    - Permite facturar una cita, es decir, generar el cobro por el servicio prestado.
+ * 
+ * 4. **Facturación y envío de correos**
+ *    - Al facturar una cita, el sistema genera automáticamente una factura en formato PDF 
+ *      (utilizando JasperReports) con los datos de la cita, el paciente, el médico y el valor a pagar.
+ *    - Luego, se envía esa factura al correo del paciente de manera automática como archivo adjunto.
+ * 
+ * 5. **Descarga o visualización de facturas**
+ *    - La clínica puede abrir o descargar la factura en formato PDF directamente desde el sistema.
+ * 
+ * 6. **Historial médico**
+ *    - Permite ver el historial médico de una cita realizada (si el médico ya lo ha registrado).
+ *    - También se puede generar un informe en PDF del historial, con el diagnóstico y la receta médica,
+ *      para imprimirlo o guardarlo.
+ * 
+ * 7. **Seguridad**
+ *    - Solo los usuarios con el rol de “CLÍNICA” pueden acceder a este controlador.
+ *    - Se verifica que la clínica solo pueda ver, modificar o facturar citas que le pertenecen.
+ * 
+ * En resumen:
+ * Esta clase actúa como el “centro de control” de las clínicas en el sistema.
+ * Se comunica con los servicios que manejan usuarios, citas, historiales médicos y correos electrónicos.
+ * Además, genera reportes PDF con JasperReports y se encarga de mantener la seguridad
+ * asegurando que cada clínica solo maneje su propia información.
+ */
+
 package com.co.gestiondecitasmedicas.controller;
 
 import java.math.BigDecimal;
