@@ -1,3 +1,20 @@
+/**
+ * Esta clase actúa como el punto de entrada principal al sistema de gestión de citas médicas
+ * después de que un usuario inicia sesión. Su función es determinar a qué sección del sistema
+ * debe acceder el usuario según los roles que tenga asignados (por ejemplo, PACIENTE, MÉDICO o CLÍNICA).
+ * 
+ * Si el usuario tiene un solo rol, se le redirige automáticamente al panel principal (dashboard)
+ * correspondiente a ese rol. Si el usuario tiene varios roles, se muestra una página donde puede
+ * elegir con cuál desea ingresar.
+ * 
+ * También incluye el acceso al panel del paciente, el cual solo puede ser visualizado por usuarios
+ * con el rol “PACIENTE”. En general, esta clase organiza la navegación inicial y garantiza que
+ * cada tipo de usuario acceda únicamente a su área del sistema.
+ */
+
+
+
+
 package com.co.gestiondecitasmedicas.controller;
 
 import java.util.Optional;
