@@ -1,3 +1,52 @@
+/**
+ * Configuración central de seguridad para el sistema de gestión de citas médicas.
+ *
+ * Esta clase define cómo Spring Security:
+ *  - Autentica a los usuarios (login)
+ *  - Verifica contraseñas
+ *  - Asigna roles
+ *  - Controla qué rutas requieren autenticación
+ *  - Administra los formularios de inicio/cierre de sesión
+ *
+ * COMPONENTES PRINCIPALES:
+ *
+ * 1. UserDetailsService (cargar usuario desde BD)
+ *    - Busca un usuario en la base de datos usando su nombre de usuario.
+ *    - Convierte sus roles (por ejemplo "ADMIN", "PACIENTE") en permisos
+ *      entendibles por Spring Security ("ROLE_ADMIN", "ROLE_PACIENTE").
+ *    - Devuelve un objeto UserDetails que Spring Security usa para validar login.
+ *
+ * 2. PasswordEncoder (BCrypt)
+ *    - Se encarga de encriptar y verificar contraseñas.
+ *    - Usa BCrypt, que es el algoritmo estándar recomendado por Spring.
+ *
+ * 3. AuthenticationProvider
+ *    - Combina el UserDetailsService y el PasswordEncoder.
+ *    - Spring Security lo usa para comparar contraseña ingresada vs contraseña en BD.
+ *
+ * 4. SecurityFilterChain (configuración HTTP)
+ *    - Define qué rutas pueden visitarse sin iniciar sesión (pública).
+ *    - Define qué rutas requieren autenticación.
+ *    - Configura el formulario de login:
+ *        * URL del formulario
+ *        * A dónde enviar los datos
+ *        * Qué nombres tienen los campos del login
+ *        * A dónde redirigir si es exitoso o si falla
+ *    - Configura el logout para cerrar sesión correctamente.
+ *
+ * RUTAS PÚBLICAS:
+ *    "/", "/index", "/login", "/registro", "/css/**", "/js/**", "/images/**"
+ *
+ * RUTAS PROTEGIDAS:
+ *    - Todas las demás requieren usuario autenticado.
+ *
+ * En resumen:
+ * Esta clase es el corazón de la seguridad del sistema. Controla todo lo relacionado
+ * con autenticación, roles, rutas protegidas, encriptación de contraseñas
+ * y manejo general de sesiones en la aplicación.
+ */
+
+
 package com.co.gestiondecitasmedicas.config;
 
 import java.util.stream.Collectors;
