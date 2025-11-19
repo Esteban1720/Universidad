@@ -1,17 +1,20 @@
 package com.co.gestiondecitasmedicas.service;
 
-// Importaciones necesarias para listas, opcionales y conjuntos
+// Importación de listas
 import java.util.List;
+
+// Manejo de Optional para valores que pueden no existir
 import java.util.Optional;
+// Manejo de conjuntos (para roles)
 import java.util.Set;
 
-// Importaciones de Spring
+// Importaciones de Spring para inyección de dependencias y transacciones
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-// Importaciones de clases de la aplicación
+// Importación de DTO, Mapper, Modelos y Repositorios
 import com.co.gestiondecitasmedicas.dto.UsuarioDto;
 import com.co.gestiondecitasmedicas.mapper.UsuarioMapper;
 import com.co.gestiondecitasmedicas.models.Clinica;
@@ -21,125 +24,127 @@ import com.co.gestiondecitasmedicas.repository.ClinicaRepository;
 import com.co.gestiondecitasmedicas.repository.RolRepository;
 import com.co.gestiondecitasmedicas.repository.UsuarioRepository;
 
-// Se importan modelos y servicios adicionales
+// Modelo Cita (solo importado)
 import com.co.gestiondecitasmedicas.models.Cita;
+
+// Repositorios e interfaces del servicio
+import com.co.gestiondecitasmedicas.repository.ClinicaRepository;
+import com.co.gestiondecitasmedicas.repository.UsuarioRepository;
 import com.co.gestiondecitasmedicas.service.CitaService;
 import com.co.gestiondecitasmedicas.service.UsuarioService;
 
-// Indica que esta clase es un servicio gestionado por Spring
+// Marcamos esta clase como un servicio de Spring
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
 
-    // Repositorio para manejar la tabla de usuarios
+    // Inyección del repositorio de usuarios
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    // Repositorio para manejar roles
+    // Inyección del repositorio de roles
     @Autowired
     private RolRepository rolRepository;
 
-    // Repositorio para manejar clínicas
+    // Inyección del repositorio de clínicas
     @Autowired
     private ClinicaRepository clinicaRepository;
 
-    // Convierte DTO a entidad Usuario
+    // Mapper para convertir entre UsuarioDto y Usuario
     @Autowired
     private UsuarioMapper usuarioMapper;
 
-    // Para encriptar contraseñas
+    // Encriptación de contraseñas
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // Inyección del servicio de citas que antes faltaba
+    
+    // <<< INYECCIÓN QUE FALTABA >>>
+    // Servicio para manejar citas
     @Autowired
     private CitaService citaService;
 
     /**
-     * Registra un nuevo usuario o actualiza roles.
-     * Si un usuario tiene rol CLINICA, le crea registro en la tabla "clinica".
+     * Método para registrar un usuario o actualizar roles existentes.
+     * Si incluye el rol CLINICA, crea la entidad Clinica vinculada.
      */
     @Override
     @Transactional
     public Usuario registrarOActualizarRoles(UsuarioDto dto) {
 
-        // Busca si ya existe un usuario por login
+        // Buscar usuario por login
         Optional<Usuario> porLogin = usuarioRepository.findByUsuariologin(dto.getUsuariologin());
-
-        // Busca si ya existe por email
+        // Buscar usuario por email
         Optional<Usuario> porEmail = usuarioRepository.findByEmail(dto.getEmail());
 
-        // Si login ya existe pero el email NO coincide → error
+        // Validación: el login ya está en uso por otro email
         if (porLogin.isPresent() && !porLogin.get().getEmail().equals(dto.getEmail())) {
             throw new RuntimeException("El nombre de usuario ya está en uso con otro email.");
         }
 
-        // Si email ya existe pero el login NO coincide → error
+        // Validación: el email ya pertenece a otro login
         if (porEmail.isPresent() && !porEmail.get().getUsuariologin().equals(dto.getUsuariologin())) {
             throw new RuntimeException("El email ya está registrado con otro usuario.");
         }
 
-        // Si no existe usuario, se crea. Si existe, se reutiliza.
+        // Obtenemos el usuario según login o email, o null si no existe
         Usuario usuario = porLogin.or(() -> porEmail).orElse(null);
 
+        // Si el usuario NO existe, lo creamos nuevo
         if (usuario == null) {
-            // Encriptar contraseña antes de guardarla
+            // Encriptamos la contraseña
             String passEnc = passwordEncoder.encode(dto.getPassword());
             dto.setPassword(passEnc);
 
-            // Convertir el DTO a entidad Usuario
+            // Convertimos el DTO a entidad Usuario con el mapper
             usuario = usuarioMapper.toUsuario(dto);
         }
 
-        // Agregar roles del DTO al usuario
+        // Agregar roles según IDs recibidos en el DTO
         if (dto.getRolesIds() != null) {
             for (Integer rolId : dto.getRolesIds()) {
-
                 // Buscar rol por ID
                 Rol rol = rolRepository.findById(rolId)
                     .orElseThrow(() -> new RuntimeException("Rol no encontrado: " + rolId));
-
-                // Si el usuario no tiene ese rol, agregarlo
+                
+                // Evitar agregar roles repetidos
                 if (!usuario.getRoles().contains(rol)) {
                     usuario.getRoles().add(rol);
                 }
             }
         }
 
-        // Guardar usuario con roles actualizados
+        // Guardamos el usuario actualizado o nuevo
         usuario = usuarioRepository.save(usuario);
 
-        // Si usuario tiene rol CLINICA → crear registro en tabla CLINICA
+        // Revisamos si el usuario tiene el rol de CLINICA
         Optional<Rol> rolClinicaOpt = rolRepository.findByNombre("CLINICA");
 
-        if (rolClinicaOpt.isPresent()
-            && dto.getRolesIds() != null
+        if (rolClinicaOpt.isPresent() && dto.getRolesIds() != null
             && dto.getRolesIds().contains(rolClinicaOpt.get().getId())) {
 
-            // Validar si ya existe la clínica asociada
+            // Verificar si ya tiene una clínica creada
             boolean existe = clinicaRepository.findByUsuarioId(usuario.getId()).isPresent();
-
+            
+            // Si no existe, se crea
             if (!existe) {
-                // Crear clínica
                 Clinica clinica = new Clinica();
-                clinica.setUsuario(usuario);
-                clinica.setNombre(usuario.getNombre());
-
-                // Guardar clínica
+                clinica.setUsuario(usuario);        // Relación con el usuario
+                clinica.setNombre(usuario.getNombre()); // Se usa el nombre del usuario
                 clinicaRepository.save(clinica);
             }
         }
 
-        return usuario; // Retorna usuario final
+        return usuario; // Se retorna el usuario registrado o actualizado
     }
 
-    // Autentica usuario comparando contraseña ingresada con la encriptada
+    // Autenticación: valida login y contraseña encriptada
     @Override
     public Optional<Usuario> autenticar(String usuariologin, String passwordPlano) {
         return usuarioRepository.findByUsuariologin(usuariologin)
             .filter(u -> passwordEncoder.matches(passwordPlano, u.getPassword()));
     }
 
-    // Buscar usuario por login
+    // Busca usuario por login
     @Override
     public Optional<Usuario> buscarPorLogin(String usuariologin) {
         return usuarioRepository.findByUsuariologin(usuariologin);
@@ -151,17 +156,52 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     @Transactional
     public Usuario registrarMedicoParaClinica(UsuarioDto dto, Integer idClinica) {
-        
-        // Obtener rol MEDICO
+
+        // Buscar rol MEDICO
         Rol rolMed = rolRepository.findByNombre("MEDICO")
             .orElseThrow(() -> new RuntimeException("Rol MEDICO no existe"));
 
-        // Asignar únicamente el rol MEDICO al DTO
+        // Asignar el rol MEDICO al DTO
         dto.setRolesIds(Set.of(rolMed.getId()));
 
-        // Crear médico usando el método principal
+        // Registrar el usuario como médico
         Usuario medico = registrarOActualizarRoles(dto);
 
-        // Buscar clínica por ID de usuario
+        // Buscar la clínica por id de usuario asociado
         Clinica clinica = clinicaRepository.findByUsuarioId(idClinica)
+            .orElseThrow(() -> new RuntimeException("No se encontró la clínica"));
+
+        // Asociar médico a la clínica
+        medico.setClinica(clinica);
+
+        return usuarioRepository.save(medico);
+    }
+    
+    // ===== Nuevos métodos =====
+
+    // Lista los médicos de una clínica según el ID
+    @Override
+    public List<Usuario> listarMedicosDeClinica(Integer clinicaId) {
+        return usuarioRepository.findByClinicaIdAndRolesNombre(clinicaId, "MEDICO");
+    }
+
+    // Lista todas las clínicas registradas
+    @Override
+    public List<Clinica> listarTodasLasClinicas() {
+        return clinicaRepository.findAll();
+    }
+
+    // Buscar usuario por ID
+    @Override
+    public Optional<Usuario> buscarPorId(Integer id) {
+        return usuarioRepository.findById(id);
+    }
+    
+    // Buscar clínica por ID
+    @Override
+    public Optional<Clinica> buscarClinicaPorId(Integer id) {
+        return clinicaRepository.findById(id);
+    }
+    
+} 
 
