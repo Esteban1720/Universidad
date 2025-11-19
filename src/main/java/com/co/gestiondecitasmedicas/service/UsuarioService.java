@@ -8,27 +8,71 @@ import com.co.gestiondecitasmedicas.models.Clinica;
 import com.co.gestiondecitasmedicas.models.Usuario;
 
 public interface UsuarioService {
+
     /**
-     * Crea un nuevo usuario con los roles indicados,
-     * o, si ya existe (por email o login), le añade
-     * únicamente los roles que no tenga asignados.
-     * Lanza RuntimeException en caso de colisión de datos
-     * (e.g. login ya existe con otro email).
+     * Registra un nuevo usuario o actualiza los roles si ya existe.
+     * Si el usuario ya existe (por login o email), se validan colisiones
+     * y solo se agregan los roles que aún no tenga asignados.
+     *
+     * @param usuarioDto Datos del usuario a registrar o actualizar.
+     * @return Usuario creado o actualizado.
      */
     Usuario registrarOActualizarRoles(UsuarioDto usuarioDto);
 
+    /**
+     * Autentica un usuario comparando el login y la contraseña en texto plano.
+     *
+     * @param usuariologin Login del usuario.
+     * @param passwordPlano Contraseña sin encriptar.
+     * @return Usuario autenticado si coincide login/password.
+     */
     Optional<Usuario> autenticar(String usuariologin, String passwordPlano);
-    Optional<Usuario> buscarPorLogin(String usuariologin);
- // en UsuarioService.java
-    Usuario registrarMedicoParaClinica(UsuarioDto dto, Integer idClinica);
-    
-    
-    // NUEVOS MÉTODOS:
-    List<Usuario> listarMedicosDeClinica(Integer clinicaId);
-    List<Clinica> listarTodasLasClinicas();
-    Optional<Usuario> buscarPorId(Integer id);
-    Optional<Clinica> buscarClinicaPorId(Integer id);
-   
-   
 
+    /**
+     * Busca un usuario por su login exacto.
+     *
+     * @param usuariologin Login del usuario.
+     * @return Optional con el usuario si existe.
+     */
+    Optional<Usuario> buscarPorLogin(String usuariologin);
+
+    /**
+     * Registra un médico asignado directamente a una clínica.
+     *
+     * @param dto Datos del médico.
+     * @param idClinica ID de la clínica a la que pertenece.
+     * @return Médico registrado con rol MEDICO y asociado a la clínica.
+     */
+    Usuario registrarMedicoParaClinica(UsuarioDto dto, Integer idClinica);
+
+    /**
+     * Lista todos los médicos asociados a una clínica.
+     *
+     * @param clinicaId ID de la clínica.
+     * @return Lista de médicos de esa clínica.
+     */
+    List<Usuario> listarMedicosDeClinica(Integer clinicaId);
+
+    /**
+     * Lista todas las clínicas del sistema.
+     *
+     * @return Lista de clínicas.
+     */
+    List<Clinica> listarTodasLasClinicas();
+
+    /**
+     * Busca un usuario por su ID.
+     *
+     * @param id ID del usuario.
+     * @return Optional con el usuario si existe.
+     */
+    Optional<Usuario> buscarPorId(Integer id);
+
+    /**
+     * Busca una clínica por su ID.
+     *
+     * @param id ID de la clínica.
+     * @return Optional con la clínica si existe.
+     */
+    Optional<Clinica> buscarClinicaPorId(Integer id);
 }
