@@ -1,36 +1,14 @@
 /**
- * Esta clase actúa como el punto de entrada principal al sistema de gestión de citas médicas
- * después de que un usuario inicia sesión. Su función es determinar a qué sección del sistema
- * debe acceder el usuario según los roles que tenga asignados (por ejemplo, PACIENTE, MÉDICO o CLÍNICA).
- * 
- * Si el usuario tiene un solo rol, se le redirige automáticamente al panel principal (dashboard)
- * correspondiente a ese rol. Si el usuario tiene varios roles, se muestra una página donde puede
- * elegir con cuál desea ingresar.
- * 
- * También incluye el acceso al panel del paciente, el cual solo puede ser visualizado por usuarios
- * con el rol “PACIENTE”. En general, esta clase organiza la navegación inicial y garantiza que
- * cada tipo de usuario acceda únicamente a su área del sistema.
+ * Controlador principal que gestiona la navegación inicial del sistema de
+ * gestión de citas médicas después del inicio de sesión.
+ *
+ * Su responsabilidad es determinar a qué panel debe ir un usuario según sus
+ * roles (PACIENTE, MÉDICO o CLÍNICA). Si un usuario tiene un solo rol, es
+ * redirigido automáticamente. Si tiene varios roles, se muestra una interfaz
+ * para que elija.
+ *
+ * También incluye el acceso al dashboard exclusivo del paciente.
  */
-
-
-
-
-package com.co.gestiondecitasmedicas.controller;
-
-import java.util.Optional;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import com.co.gestiondecitasmedicas.models.Usuario;
-import com.co.gestiondecitasmedicas.service.UsuarioService;
-
 @Controller
 public class HomeController {
 
@@ -38,14 +16,23 @@ public class HomeController {
     private UsuarioService usuarioService;
 
     /**
-     * Al entrar en /home revisamos cuántos roles tiene el usuario.
-     * - Si tiene 1, redirige directo al dashboard de ese rol.
-     * - Si tiene >1, muestra la vista de selección de rol.
+     * Endpoint principal del sistema después del login.
+     *
+     * <p>Flujo general:</p>
+     * <ul>
+     *     <li>Si el usuario no está autenticado, se redirige al login.</li>
+     *     <li>Si el usuario tiene 1 solo rol, se redirige automáticamente a su dashboard.</li>
+     *     <li>Si el usuario tiene varios roles, se muestra una vista para elegir uno.</li>
+     * </ul>
+     *
+     * @param userDetails Datos del usuario autenticado proporcionados por Spring Security.
+     * @param model Objeto usado para enviar datos a la vista.
+     * @return Vista o redirección correspondiente.
      */
     @GetMapping("/home")
     public String home(
-        @AuthenticationPrincipal UserDetails userDetails,
-        Model model
+            @AuthenticationPrincipal UserDetails userDetails,
+            Model model
     ) {
         if (userDetails == null) {
             return "redirect:/login";
@@ -53,51 +40,66 @@ public class HomeController {
 
         String login = userDetails.getUsername();
         Optional<Usuario> opt = usuarioService.buscarPorLogin(login);
+
         if (opt.isEmpty()) {
             return "redirect:/login";
         }
-        Usuario usuario = opt.get();
-        Set<String> roles = usuario.getRoles()
-                                   .stream()
-                                   .map(r -> r.getNombre())
-                                   .collect(java.util.stream.Collectors.toSet());
 
+        Usuario usuario = opt.get();
+
+        Set<String> roles = usuario.getRoles()
+                .stream()
+                .map(r -> r.getNombre())
+                .collect(Collectors.toSet());
+
+        // Si tiene solo un rol → redirigir directamente
         if (roles.size() == 1) {
-            // Sólo un rol: redirigimos sin mostrar página intermedia
             String rol = roles.iterator().next();
             return "redirect:" + urlPorRol(rol);
         }
 
-        // Múltiples roles: mostramos selector
+        // Si tiene varios roles → mostrar pantalla de selección
         model.addAttribute("nombreUsuario", usuario.getNombre());
         model.addAttribute("roles", roles);
+
         return "seleccionar-rol";
     }
 
     /**
-     * Recibe el rol seleccionado y redirige al dashboard correspondiente.
+     * Procesa la selección de rol hecha por un usuario con múltiples roles.
+     *
+     * @param rol Rol seleccionado por el usuario desde el formulario.
+     * @return Redirección hacia el dashboard correspondiente al rol.
      */
     @PostMapping("/home/selectRole")
-    public String seleccionarRol(
-        @RequestParam("rol") String rol
-    ) {
+    public String seleccionarRol(@RequestParam("rol") String rol) {
         return "redirect:" + urlPorRol(rol);
     }
 
     /**
-     * Mapea el nombre de rol a la URL de su dashboard.
+     * Asocia un nombre de rol con su URL de dashboard correspondiente.
+     *
+     * @param rol Nombre del rol (PACIENTE, MEDICO, CLINICA).
+     * @return URL del dashboard de dicho rol.
      */
     private String urlPorRol(String rol) {
         return switch (rol) {
             case "PACIENTE" -> "/paciente/dashboard";
             case "MEDICO"   -> "/medico/dashboard";
             case "CLINICA"  -> "/clinica/dashboard";
-            default         -> "/home";  // fallback
+            default         -> "/home"; // fallback en caso de rol desconocido
         };
     }
-    
-    
- // src/main/java/com/co/gestiondecitasmedicas/controller/HomeController.java
+
+    /**
+     * Dashboard exclusivo para usuarios con el rol PACIENTE.
+     *
+     * <p>Está protegido por Spring Security usando @PreAuthorize.</p>
+     *
+     * @param userDetails Información del usuario autenticado.
+     * @param model Modelo para pasar datos a la vista.
+     * @return Vista Thymeleaf del dashboard de paciente.
+     */
     @GetMapping("/paciente/dashboard")
     @PreAuthorize("hasRole('PACIENTE')")
     public String dashPaciente(
@@ -107,5 +109,4 @@ public class HomeController {
         model.addAttribute("nombreUsuario", userDetails.getUsername());
         return "paciente/dashboard";
     }
-
 }
